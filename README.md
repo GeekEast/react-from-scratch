@@ -36,3 +36,10 @@ node_modules/.bin/webpack
 ```
 - `production` mode (default) -> minimized bundle.js
 - `development` mode -> more code but kind of readable
+
+
+### Add `.gitignore`
+```
+node_modules
+dist
+```
