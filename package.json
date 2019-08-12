@@ -1,11 +1,25 @@
 {
 	"name": "react-webpack",
 	"version": "0.1.0",
-	"description": "",
+	"description": "```sh mkdir react-webpack && cd react-webpack ```",
 	"main": "index.js",
 	"scripts": {
+		"build": "webpack",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"author": "James",
-	"license": "ISC"
+	"license": "ISC",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/GeekEast/react-from-scratch.git"
+	},
+	"keywords": [],
+	"bugs": {
+		"url": "https://github.com/GeekEast/react-from-scratch/issues"
+	},
+	"homepage": "https://github.com/GeekEast/react-from-scratch#readme",
+	"devDependencies": {
+		"webpack": "^4.39.1",
+		"webpack-cli": "^3.3.6"
+	}
 }
