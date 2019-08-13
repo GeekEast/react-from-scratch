@@ -4,7 +4,7 @@
 | Webpack             | Bundler                        | [Mode](#5); [Server](#6); [Debugger](#7anal); [Analyzer](#12); [Externalize](#13)                    |
 | Babel               | Transpiler                     | [React Class](#8); [Loader](#9); [Polyfill](#14)                                                     |
 | React               | Component Web                  | [Hot Loading](#10); [Lazy Loading](#15); [Strict Mode](#22); [Error Boundary](#23); [propTypes](#24) |
-| NPM                 | Node                           | [Git Repo Info](#1); [Scripts](#11)                                                                  |
+| NPM                 | Node                           | [Git Repo Info](#1); [Scripts](#11)                                                                  |
 | Test                | Test code                      | [Jest](#16)                                                                                          |
 | Code Formatter      | Format code                    | [Prettier](#17)                                                                                      |
 | Code Error Detector | Detect potential error of code | [ESLint](#18); [react-axe](#20)                                                                      |
