@@ -1,67 +1,70 @@
-### Create Project
+| Tool                | Description                    | Branch                                                                                               |
+| ------------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| Git                 | Version Control                | [Repo](#1); [Husky](#21); [Boilerplate](#25)                                                         |
+| Webpack             | Bundler                        | [Mode](#5); [Server](#6); [Debugger](#7anal); [Analyzer](#12); [Externalize](#13)                    |
+| Babel               | Transpiler                     | [React Class](#8); [Loader](#9); [Polyfill](#14)                                                     |
+| React               | Component Web                  | [Hot Loading](#10); [Lazy Loading](#15); [Strict Mode](#22); [Error Boundary](#23); [propTypes](#24) |
+| NPM                 | Node                           | [Git Repo Info](#1); [Scripts](#11)                                                                  |
+| Test                | Test code                      | [Jest](#16)                                                                                          |
+| Code Formatter      | Format code                    | [Prettier](#17)                                                                                      |
+| Code Error Detector | Detect potential error of code | [ESLint](#18); [react-axe](#20)                                                                      |
+
+<h3 id='1'>Intialize Project</h3>
+
+- Create `react-webpack` folder
 
 ```sh
 mkdir react-webpack && cd react-webpack
 ```
 
-### Init Project
+- Initialize `package.json`
 
 ```sh
 npm init
 ```
 
-### Create Git Repo
+- Initialize `.git`
 
 ```sh
 git add -A
 git commit -m "init"
-# go to github and create the react-from-scratch report
+```
+
+- Create `react-from-scratch` in `Github`
+
+```sh
 git remote add origin git@github.com:GeekEast/react-from-scratch.git
 git push -u origin master
 ```
 
-### Add git info to `package.json`
+- Append `git` info to `package.json`
 
 ```sh
 npm init -y
 ```
 
-### Install Webpack
-
-```sh
-yarn add --dev webpack webpack-cli
-```
-
-### Build Project
-
-- manually
-
-```sh
-node_modules/.bin/webpack
-```
-
-- using `yarn` or `npm`
-
-```json
-	"scripts": {
-		"build": "webpack",
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-```
-
-- `production` (default) -> minimized and optimize bundle.js
-  - `yarn build`
-- `development` mode -> more code but kind of readable if you want to debug (seldomly)
-  - `yarn build -- --mode development`
-
-### Add `.gitignore`
+- Add `.gitignore`
 
 ```
 node_modules
 dist
 ```
 
-### Custom Webpack Configs
+<h3 id='2'>Webpack</h3>
+
+- Install `yarn add --dev webpack webpack-cli`
+- Modify `package.json`
+
+```json
+	"scripts": {
+		"build": "webpack"
+	},
+```
+
+- Webpack two modes：
+  - `production` (default) -> minimized and optimize bundle.js `yarn build`
+  - `development` mode -> more code but kind of readable if you want to debug (seldomly) `yarn build -- --mode development`
+- config `webpack.config.js`
 
 ```javascript
 // webpack.config.js
@@ -76,41 +79,20 @@ module.exports = {
 }
 ```
 
-### Install Babel
-
-```sh
-yarn add --dev @babel/core @babel/cli @babel/preset-env
-```
-
-### Run Babel
-
-- manually
-
-```sh
-node_modules/.bin/babel ./src/greet.js --presets=@babel/preset-env
-# or
-$(npm bin)/babel ./src/greet.js --presets=@babel/preset-env
-```
-
-### Add babel to webpack
-
-- install loader
-  - loader is sth that helps webpack to translate some kind of files.
-
-```sh
-yarn add --dev babel-loader
-```
-
+<h3 id='3'>Babel</h3>
+- Install `yarn add --dev @babel/core @babel/cli @babel/preset-env`
+- Install `yarn add --dev babel-loader`
+- Config  `webpack.config.js`
 ```js
-// webpack.config.js
 const path = require('path')
 module.exports = {
-  mode: 'production', // production or development
-  entry: './src/index.js', // the entry point of the project
+  mode: 'production',
+  entry: './src/index.js', 
   output: {
-    path: path.join(__dirname, 'dist'), // built file path
-    filename: 'app.bundle.js' // built file name
+    path: path.join(__dirname, 'dist'), 
+    filename: 'app.bundle.js' 
   },
+  // here
   module: {
     rules: [
       {
@@ -126,25 +108,20 @@ module.exports = {
 }
 ```
 
-### Add React
+<h3 id='4'>React</h3>
 
-```sh
-yarn add react react-dom prop-types
-```
-
-```sh
-yarn add @babel/preset-react
-```
+- Install `yarn add react react-dom prop-types`
+- Babel Support `yarn add @babel/preset-react`
+- Config `webpack.config.js`
 
 ```js
-// webpack.config.js
 const path = require('path')
 module.exports = {
-  mode: 'production', // production or development
-  entry: './src/index.js', // the entry point of the project
+  mode: 'production',
+  entry: './src/index.js',
   output: {
-    path: path.join(__dirname, 'dist'), // built file path
-    filename: 'app.bundle.js' // built file name
+    path: path.join(__dirname, 'dist'),
+    filename: 'app.bundle.js'
   },
   module: {
     rules: [
@@ -153,7 +130,10 @@ module.exports = {
         loader: 'babel-loader',
         exclude: /node_modules/,
         options: {
-          presets: ['@babel/preset-env', '@babel/preset-react']
+          presets: [
+            '@babel/preset-env',
+            '@babel/preset-react' // here
+          ]
         }
       }
     ]
@@ -161,18 +141,12 @@ module.exports = {
 }
 ```
 
-### html-webpack-plugin
-
-- It will generate the an entry html file in the dist folder.
-- THe entry html file will automatically include the bundled js file.
-- For react app, we need an entry html to plugin all the components.
-- **One html entry point and one javascript, That's all for a React App, right?**
-
-```sh
-yarn add --dev html-webpack-plugin
-```
-
-#### create boilerplate
+- Install `yarn add --dev html-webpack-plugin`
+  - It will generate the an entry html file in the dist folder.
+  - The entry html file will automatically include the bundled js file.
+  - `For react app, we need an entry html to plugin all the components.`
+  - `One html entry point and one javascript, That's all for a React App, right?`
+- create boilerplate of entry html
 
 ```html
 <!-- src/index.html -->
@@ -189,17 +163,17 @@ yarn add --dev html-webpack-plugin
 </html>
 ```
 
-#### webpack config
+- Modify `webpack.config.js`
 
 ```js
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 module.exports = {
-  mode: 'production', // production or development
-  entry: './src/index.js', // the entry point of the project
+  mode: 'production',
+  entry: './src/index.js',
   output: {
-    path: path.join(__dirname, 'dist'), // built file path
-    filename: 'app.bundle.js' // built file name
+    path: path.join(__dirname, 'dist'),
+    filename: 'app.bundle.js'
   },
   module: {
     rules: [
@@ -208,11 +182,12 @@ module.exports = {
         loader: 'babel-loader',
         exclude: /node_modules/,
         options: {
-          presets: ['@babel/preset-env', '@babel/preset-react'] // type of js version to recognise
+          presets: ['@babel/preset-env', '@babel/preset-react']
         }
       }
     ]
   },
+  // here
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/index.html'
@@ -221,10 +196,10 @@ module.exports = {
 }
 ```
 
-### Webpack Watch Mode
-
-- watch mode: every time a file changes, the webpack will rebuild
-- very suitable for development mode
+- Webpack `Watch` Mode
+  - watch mode: every time a file changes, the webpack will `rebuild`
+  - very suitable for development mode
+- Modify `package.json`
 
 ```json
 // package.json
@@ -234,25 +209,24 @@ module.exports = {
 }
 ```
 
-### Seperate Prod and Dev for Webpack Config
+<h3 id='5'>Webpack Config Branching</h3>
 
-- Install `webpack-merge`
-
-```sh
-yarn add --dev web-merge
-```
-
-- rename `webpack.config.js` to `webpack.config.base.js`
-- create `webpack.config.prod.js` and `webpack.config.dev.js`
+- Install `yarn add --dev web-merge`
+- Rename `webpack.config.js` to `webpack.config.base.js`
+- Create `webpack.config.prod.js` and `webpack.config.dev.js`
+- Config `webpack.config.prod.js`
 
 ```javascript
-// webpack.config.prod.js
 const merge = require('webpack-merge')
 const baseConfig = require('./webpack.config.base')
 module.exports = merge(baseConfig, {
   mode: 'development'
 })
+```
 
+- Config `webpack.config.dev.js`
+
+```javascript
 // webpack.config.dev.js
 const merge = require('webpack-merge')
 const baseConfig = require('./webpack.config.base')
@@ -261,61 +235,57 @@ module.exports = merge(baseConfig, {
 })
 ```
 
-- modify `package.json`
-
-```json
-	"scripts": {
-		"build": "webpack --config webpack.config.prod.js",
-		"dev": "webpack --watch --config webpack.config.dev.js",
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-```
-
-### Run React App in Watch Mode
-
-- Eveytime you modify files, webpack will rebuild and the brower will be automatically refreshed
-- Install ``webpack-dev-server`
-
-```sh
-yarn add --dev webpack-dev-server
-```
-
 - Modify `package.json`
 
 ```json
 	"scripts": {
 		"build": "webpack --config webpack.config.prod.js",
-		"dev": "webpack-dev-server --open --config webpack.config.dev.js",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"dev": "webpack --watch --config webpack.config.dev.js",
 	},
 ```
 
-- Custom dev server port, modify `webpack.config.dev.js`
+<h3 id='6'>Run React App in Local Server</h3>
+
+- Eveytime you modify files, webpack will rebuild and the brower will be automatically refreshed
+- Install `yarn add --dev webpack-dev-server`
+- Modify `package.json`
+
+```json
+"scripts": {
+  "build": "webpack --config webpack.config.prod.js",
+   // here: --open
+   "dev": "webpack-dev-server --open --configwebpack.config.dev.js"
+},
+```
+
+- Modify `webpack.config.dev.js`
 
 ```javascript
 module.exports = merge(baseConfig, {
   mode: 'development',
+  // here
   devServer: {
     port: 9000
   }
 })
 ```
 
-### Debugger
+<h3 id='7'>Debugger</h3>
 
-- add `debugger` as a break point
+- Debugger is a `break point`
+- Add `debugger` in App.js
 
 ```javascript
 // App.js
 class App extends React.Component {
   render() {
-    debugger
+    debugger // here
     return <h1>Hello world!!!</h1>
   }
 }
 ```
 
-- add `dev-tool` in `webpack.config.dev.js`
+- Modify `webpack.config.dev.js`
 
 ```javascript
 module.exports = merge(baseConfig, {
@@ -323,21 +293,38 @@ module.exports = merge(baseConfig, {
   devServer: {
     port: 9000
   },
+  // here
   devtool: 'source-map'
 })
 ```
 
 - open browser -> inspect -> refesh App page -> check source code
 
-### Add syntax support for react class
+<h3 id='8'>Syntax Support for React Class</h3>
 
-- Install `@babel/plugin-proposal-class-properties`
+- Install `yarn add --dev @babel/plugin-proposal-class-properties`
+- Modify `webpack.config.base.js`
 
-```sh
-yarn add --dev @babel/plugin-proposal-class-properties
+```javascript
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        options: {
+          presets: ['@babel/preset-env', '@babel/preset-react'],
+          plugins: [
+            '@babel/plugin-proposal-class-properties', // here
+          ]
+        }
+      },
 ```
 
-- Modify `webpack.config.base.js`
+<h3 id='9'>Loader for CSS</h3>
+
+- Install `yarn add --dev style-loader css-loader`
+- Modify `webpack.confg.base.js`
 
 ```javascript
 	module: {
@@ -350,34 +337,6 @@ yarn add --dev @babel/plugin-proposal-class-properties
 					presets: [ '@babel/preset-env', '@babel/preset-react' ],
 					plugins: [ '@babel/plugin-proposal-class-properties' ] // here
 				}
-			}
-		]
-	},
-```
-
-### Loader for CSS
-
-- Install `css-loader`
-
-```sh
-# style loader is for syntax
-# css loader is for inject css to html
-yarn add --dev css-loader style-loader
-```
-
-- Modify `webpack.confg.base.js`
-
-```javascript
-	module: {
-		rules: [
-			{
-				test: /\.js$/,
-				loader: 'babel-loader',
-				exclude: /node_modules/,
-				options: {
-					presets: [ '@babel/preset-env', '@babel/preset-react' ], // type of js version to recognise
-					plugins: [ '@babel/plugin-proposal-class-properties' ]
-				}
 			},
 			{
 				test: /\.css$/,
@@ -388,51 +347,10 @@ yarn add --dev css-loader style-loader
 	},
 ```
 
-### Code Change without reseting state
+<h3 id='10'>React Hot Loading</h3>
 
-- you want to keep current page's state even you have modify some code. In the following case, if you change the color in css, the page will be `refreshed`, and the state of `count` was lost.
-
-```css
-.warning {
-  color: blue;
-}
-```
-
-```javascript
-// App.js
-class App extends React.Component {
-  state = {
-    count: 0
-  }
-  render() {
-    return (
-      <div>
-        <h1>Hello World</h1>
-        <h2 className={this.state.count > 10 ? 'warning' : null}>
-          Count: {this.state.count}
-        </h2>
-        <button
-          onClick={() => this.setState(state => ({ count: state.count + 1 }))}
-        >
-          +
-        </button>
-        <button
-          onClick={() => this.setState(state => ({ count: state.count - 1 }))}
-        >
-          -
-        </button>
-      </div>
-    )
-  }
-}
-```
-
-- Install `react-hot-loader`
-
-```sh
-yarn add react-hot-loader
-```
-
+- Keep `state` when you modify code
+- Install `yarn add react-hot-loader`
 - Modify `webpack.config.dev.js`
 
 ```javascript
@@ -447,7 +365,7 @@ yarn add react-hot-loader
 			},
 ```
 
-- Modify the `component` file you want to use `react-hot-loader`
+- Modify the `component` you want to use `react-hot-loader`
 
 ```javascript
 // App.js
@@ -465,14 +383,11 @@ export default hot(module)(App);
 	"scripts": {
 		"build": "webpack --config webpack.config.prod.js",
 		"dev": "webpack-dev-server --open --config webpack.config.dev.js",
-		"dev:hot": "webpack-dev-server --open --hot --config webpack.config.dev.js",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"dev:hot": "webpack-dev-server --open --hot --config webpack.config.dev.js" // here
 	},
 ```
 
-- So when you modify the code (**not refesh the page!**), the state of that page will be kept by `hot-loader`
-
-### Avoid Duplicate Scripts in `package.json`
+<h3 id='11'>Remove Duplicates in package.json</h3>
 
 - Before
 
@@ -496,38 +411,35 @@ export default hot(module)(App);
 	},
 ```
 
-### Analyse the bundles
+<h3 id='12'>Webpack Bundle Analyzer</h3>
 
-- Install `webpack-bundle-analyzer`
-
-```sh
-yarn add --dev webpack-bundle-analyzer
-```
-
-- modify the `webpack.config.prod.js`
+- Install `yarn add --dev webpack-bundle-analyzer`
+- Modify the `webpack.config.prod.js`
 
 ```javascript
 const merge = require('webpack-merge')
+// here
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const baseConfig = require('./webpack.config.base')
 
 module.exports = merge(baseConfig, {
   mode: 'production',
   plugins: [
+    // here
     new BundleAnalyzerPlugin({
       analyzerMode: 'static', // optional: generate a report html rather than starting a server
       openAnalyzer: false // optional: to generate report html wihtout opening it
+      reportFilename: 'bundle_size.html' //optiona: the report name
     })
-  ]
+  ],
 })
 ```
 
-- run build `yarn build` -> will start a server
+- `yarn build` -> will generate a report in `dist`
 
-### Add CDN to Webpack
+<h3 id='13'>Externalize in Webpack</h3>
 
-- **Question: Why we need CDN of React and ReactDOM?**
-- [use React and ReactDOM via CDN](https://zh-hans.reactjs.org/docs/cdn-links.html)
+- [React and ReactDOM CDN](https://zh-hans.reactjs.org/docs/cdn-links.html)
 - Modify `webpack.config.prod.js`
 
 ```javascript
@@ -559,32 +471,45 @@ module.exports = merge(baseConfig, {
 </body>
 ```
 
-### Add Syntax for [Browsers](https://www.cnblogs.com/chyingp/p/understanding-babel-polyfill.html)
+<h3 id='14'>Polyfill for Browsers</h3>
 
-- `polyfill`: provide something that browser cannot do
-- Install `@babel/polyfill`
-
-```sh
-yarn add  @babel/polyfill
-```
-
+- Polyfill: provide something that browser cannot do
+- Install `yarn add @babel/polyfill`
 - Modify `index.js`
 
 ```javascript
-// import React from 'react';
-// import ReactDOM from 'react-dom';
 import '@babel/polyfill'
-// import App from './App';
-// import './styles.css';
-// ReactDOM.render(<App />, document.getElementById('app'));
 ```
 
-- This will add large to the bundle file, which will affect the performance
-  - If you know what browser users are going to user, you should try to avoid polyfill
+- Polyfill will make the bundle file large significantly, need `selection` to slim bunlde file.
+  `npx browserslist "last 2 versons, not dead, not < 2%"` (**market share**)
+- Modify `webpack.config.base.js`
 
-### Asynchronously Load Component (Lazy Loading)
+```javascript
+...
+module: {
+		rules: [
+			{
+				test: /\.js$/,
+				loader: 'babel-loader',
+				exclude: /node_modules/,
+				options: {
+					presets: [
+            // here
+						[
+							'@babel/preset-env',
+							{
+								targets: [ 'last 2 versions', 'not dead', 'not < 2%', 'not ie 11' ],
+								userBuiltIns: 'entry'
+							}
+						],
+            '@babel/preset-react'
+            ...
+```
 
-- no use, no import; `import on use`, this will improve performance.
+<h3 id='15'>React Lazy Loading</h3>
+
+- Import on use -> this will improve performance.
 - Install `yarn add @babel/plugin-syntax-dynamic-import`
 - Modify `webpack.config.base.js`
 
@@ -652,10 +577,10 @@ class App extends React.Component {
 ...
 ```
 
-### Jest
+<h3 id='16'>Jest Testing Library</h3>
 
 - Install `jest` `yarn add --dev jest`
-- modify `package.json`
+- Modify `package.json`
 
 ```json
 	"scripts": {
@@ -666,7 +591,7 @@ class App extends React.Component {
 	},
 ```
 
-- create test file src/App.test.js
+- Create test file `src/App.test.js`
 
 ```javascript
 describe('App', () => {
@@ -676,7 +601,7 @@ describe('App', () => {
 })
 ```
 
-### Code Auto-formatting
+<h3 id='17'>Code Formatter: Prettier</h3>
 
 - Install `yarn add --dev prettier pretty-quick`
 - Modify `package.json`
@@ -691,10 +616,9 @@ describe('App', () => {
 	},
 ```
 
-- Custom Configuration: add `.prettierrc .prettierignore`
+- Config `.prettierrc`
 
 ```json
-// .prettierrc
 {
   "tabWidth": 2,
   "semi": false,
@@ -702,8 +626,7 @@ describe('App', () => {
 }
 ```
 
-- Format manually `npx prettier --write "**/*.js"`
-- But we don't want to format `dist/*.js`
+- Config `.prettierignore`
 
 ```json
 // .prettierrcignore
@@ -711,11 +634,11 @@ dist
 package-lock.json
 ```
 
-- Or you could use vs-code `prettier` (**Easy**)
+- Or you could use vs-code `prettier` (Easy)
 
-### Code Error Detector
+<h3 id='18'>Code Industry Normalization: ESLint</h3>
 
-- ESLint: hint common error of code before actually running it.
+- ESLint: hint `potential` error of code before actually running it.
 - Install `yarn add --dev eslint eslint-plugin-react`
 - Modify `package.json`
 
@@ -730,51 +653,7 @@ package-lock.json
 	},
 ```
 
-- Config ESLint `./node_modules/.bin/eslint --init`
-
-```json
-{
-  "env": {
-    "browser": true,
-    "commonjs": true,
-    "es6": true,
-    "node": true
-  },
-  "extends": "eslint:recommended",
-  "globals": {
-    "Atomics": "readonly",
-    "SharedArrayBuffer": "readonly"
-  },
-  "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
-    },
-    "ecmaVersion": 2018,
-    "sourceType": "module"
-  },
-  "plugins": ["react"]
-  // there are fommatting configs, we use prettier, so just comment it.
-  // "rules": {
-  //     "indent": [
-  //         "error",
-  //         4
-  //     ],
-  //     "linebreak-style": [
-  //         "error",
-  //         "unix"
-  //     ],
-  //     "quotes": [
-  //         "error",
-  //         "single"
-  //     ],
-  //     "semi": [
-  //         "error",
-  //         "never"
-  //     ]
-  // }
-}
-```
-
+- Initialize ESLint `./node_modules/.bin/eslint --init`
 - Config `.eslintignore`
 
 ```json
@@ -782,7 +661,7 @@ dist
 ```
 
 - Install `yarn add --dev babel-eslint`
-- modify `.eslintrc.json`
+- Modify `.eslintrc.json`
 
 ```json
 {
@@ -803,16 +682,17 @@ dist
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
     },
+   // don't add rules if you use prettier
 ...
 ```
 
 - Then `yarn lint` will tell you some common errors -> trace the errors and fix them.
 
-### Eslint for accessibility issues detect
+<h3 id='19'>Detect Accessibility Issues with ESLint</h3>
 
 - Accessibility: for example, if you don't set alt key for `<img>`, it's not accessible
 - Install `yarn add --dev eslint-plugin-jsx-a11y`
-- config `.eslintrc.json`
+- Modify `.eslintrc.json`
 
 ```json
     "extends": ["eslint:recommended","plugin:react/recommended",
@@ -823,7 +703,24 @@ dist
     ]
 ```
 
-### Avoid Bad Commit & Push - Husky
+<h3 id='20'>Detect Accessibility Issues that ESLint can't detect</h3>
+
+- Install `yarn add --dev react-axe`
+- The detector will be shown in `chrome` console
+- Modify `index.js`
+
+```javascript
+...
+import DefaultsErrorBoundary from './DefaultsErrorBoundary';
+if (process.env.NODE_ENV === 'development') {
+	const axe = require('react-axe');
+	// 1000 is 1s to check accessibility issue
+	axe(React, ReactDOM, 1000);
+}
+...
+```
+
+<h3 id='21'>Husky: make commit good</h3>
 
 - Install `yarn add --dev husky`
 - Modify `package.json`
@@ -843,7 +740,116 @@ dist
     - if it fails, commit never happens
     - if it succeeds, commit succeeds.
 
-### Points
+<h3 id='22'>React Strict Mode</h3>
+
+- Only useful in `development` mode rather than in `production` mode
+- You want to check `method version` (deprecated) problems deep in the code tree -> use `<React.StrictMode/>`
+
+```javascript
+// index.js
+...
+ReactDOM.render(
+  // or anywhere else
+  <React.StrictMode>
+    <App/>
+  </React.StrictMode>,
+  document.getElementById('app')
+)
+```
+
+<h3 id='23'>Error Boundary</h3>
+
+- Case: Error not handled.
+- Normally, nothing will be shown.
+- But you want to show sth when there is a error
+- Create `src/DefaultErrorBoundary`
+
+```javascript
+import React from 'react'
+export default class DefaultErrorBoundary extends React.Component {
+  state = {
+    isError: false
+  }
+
+  static getDerivedStateFromError() {
+    return { isError: true }
+  }
+  render() {
+    const { isError } = this.state
+    const { children } = this.props
+    return isError ? <div>Something wrong</div> : children
+  }
+}
+```
+
+- Modify `index.js`
+
+```javascript
+ReactDOM.render(
+  <React.StrictMode>
+    <DefaultsErrorBoundary>
+      <App />
+    </DefaultsErrorBoundary>
+  </React.StrictMode>,
+  document.getElementById('app')
+)
+```
+
+<h3 id='24'>Define propTypes for React</h3>
+
+- lint: `'children' is missing in props validation`
+- solution: define propTypes
+- Install `yarn add prop-types`
+- Modify `DefaultsErrorBoundary.js`
+
+```javascript
+...
+import propTypes from 'prop-types';
+  ...
+	static propTypes = {
+		children: propTypes.node.isRequired
+  };
+  ...
+```
+
+<h3 id='25'>Boilerplate to create React app</h3>
+
+- **Step 1**: slim your configured React App to a boilerplate
+- **Step 2**: git add && commit && push to the remote repo
+- **Step 3**: `git clone --depth=1 git@... project_name` to clone the last commit of the remote repo
+- **Step 4**: cd the project and `rm -rf .git`
+- **Step 5**: intialize as your own project `git init`
+- **Step 6**: go back to the `start` of this tutorial, you will know what to do next.
+
+### Questions
+
+#### What is `preset-env`
 
 - preset-env includes a lot of latest javascript version, for example, es2015; es2016; es2107
 - preset-react is especially for react code
+
+#### How to run webpack manually?
+
+`node_modules/.bin/webpack`
+
+#### How to run babel manually
+
+```sh
+node_modules/.bin/babel ./src/greet.js --presets=@babel/preset-env
+# or
+$(npm bin)/babel ./src/greet.js --presets=@babel/preset-env
+```
+
+#### How to format code using prettier manually?
+
+```sh
+npx prettier --write "**/*.js"
+```
+
+#### What is loader in webpack?
+
+- loader is sth that helps webpack to translate some kind of files.
+
+#### Question: Why we need CDN of React and ReactDOM?
+
+- need answer

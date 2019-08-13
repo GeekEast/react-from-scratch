@@ -14,7 +14,21 @@ module.exports = {
         loader: 'babel-loader',
         exclude: /node_modules/,
         options: {
-          presets: ['@babel/preset-env', '@babel/preset-react'], // type of js version to recognise
+          presets: [
+            [
+              '@babel/preset-env',
+              {
+                targets: [
+                  'last 2 versions',
+                  'not dead',
+                  'not < 2%',
+                  'not ie 11'
+                ],
+                userBuiltIns: 'entry'
+              }
+            ],
+            '@babel/preset-react'
+          ], // type of js version to recognise
           plugins: [
             '@babel/plugin-proposal-class-properties',
             'react-hot-loader/babel',
