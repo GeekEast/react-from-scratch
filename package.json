@@ -1,25 +1,62 @@
 {
-	"name": "react-webpack",
-	"version": "0.1.0",
-	"description": "```sh mkdir react-webpack && cd react-webpack ```",
-	"main": "index.js",
-	"scripts": {
-		"build": "webpack",
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"author": "James",
-	"license": "ISC",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/GeekEast/react-from-scratch.git"
-	},
-	"keywords": [],
-	"bugs": {
-		"url": "https://github.com/GeekEast/react-from-scratch/issues"
-	},
-	"homepage": "https://github.com/GeekEast/react-from-scratch#readme",
-	"devDependencies": {
-		"webpack": "^4.39.1",
-		"webpack-cli": "^3.3.6"
-	}
+  "name": "react-webpack",
+  "version": "0.1.0",
+  "description": "```sh mkdir react-webpack && cd react-webpack ```",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --config webpack.config.prod.js",
+    "dev": "webpack-dev-server --open --config webpack.config.dev.js",
+    "dev:hot": "npm run dev -- --hot",
+    "test": "jest",
+    "format": "pretty-quick",
+    "lint": "eslint ./"
+  },
+  "author": "James",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GeekEast/react-from-scratch.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/GeekEast/react-from-scratch/issues"
+  },
+  "homepage": "https://github.com/GeekEast/react-from-scratch#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/preset-env": "^7.5.5",
+    "babel-eslint": "^10.0.2",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.2.0",
+    "eslint": "^6.1.0",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.14.3",
+    "html-webpack-plugin": "^3.2.0",
+    "husky": "^3.0.3",
+    "jest": "^24.8.0",
+    "prettier": "^1.18.2",
+    "style-loader": "^1.0.0",
+    "webpack": "^4.39.1",
+    "webpack-bundle-analyzer": "^3.4.1",
+    "webpack-cli": "^3.3.6",
+    "webpack-dev-server": "^3.8.0",
+    "webpack-merge": "^4.2.1"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.4.4",
+    "@babel/preset-react": "^7.0.0",
+    "pretty-quick": "^1.11.1",
+    "prop-types": "^15.7.2",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-hot-loader": "^4.12.11"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged && npm run lint && npm run test"
+    }
+  }
 }
