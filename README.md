@@ -26,6 +26,7 @@ npm init
 - Initialize `.git`
 
 ```sh
+git init
 git add -A
 git commit -m "init"
 ```
@@ -211,7 +212,7 @@ module.exports = {
 
 <h3 id='5'>Webpack Config Branching</h3>
 
-- Install `yarn add --dev web-merge`
+- Install `yarn add --dev webpack-merge`
 - Rename `webpack.config.js` to `webpack.config.base.js`
 - Create `webpack.config.prod.js` and `webpack.config.dev.js`
 - Config `webpack.config.prod.js`
@@ -639,7 +640,7 @@ package-lock.json
 <h3 id='18'>Code Industry Normalization: ESLint</h3>
 
 - ESLint: hint `potential` error of code before actually running it.
-- Install `yarn add --dev eslint eslint-plugin-react`
+- Install `yarn add --dev eslint eslint-plugin-react@latest`
 - Modify `package.json`
 
 ```json
