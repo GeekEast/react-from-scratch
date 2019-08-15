@@ -5,7 +5,7 @@
 | Babel               | Transpiler                     | [React Class](#8); [Loader](#9); [Polyfill](#14)                                                     |
 | React               | Component Web                  | [Hot Loading](#10); [Lazy Loading](#15); [Strict Mode](#22); [Error Boundary](#23); [propTypes](#24) |
 | NPM                 | Node                           | [Git Repo Info](#1); [Scripts](#11)                                                                  |
-| Test                | Test code                      | [Jest](#16)                                                                                          |
+| Test                | Test code                      | [Jest & Enzyme](#16)                                                                                 |
 | Code Formatter      | Format code                    | [Prettier](#17)                                                                                      |
 | Code Error Detector | Detect potential error of code | [ESLint](#18); [react-axe](#20)                                                                      |
 
@@ -578,28 +578,52 @@ class App extends React.Component {
 ...
 ```
 
-<h3 id='16'>Jest Testing Library</h3>
+<h3 id='16'>Jest Testing Library - Jest & Enzyme</h3>
 
-- Install `jest` `yarn add --dev jest`
+- Install `yarn add --dev jest ts-jest jest-static-stubs identity-obj-proxy enzyme @types/enzyme enzyme-adapter-react-16 enzyme-to-json`
 - Modify `package.json`
 
 ```json
-	"scripts": {
-		"build": "webpack --config webpack.config.prod.js",
-		"dev": "webpack-dev-server --open --config webpack.config.dev.js",
-		"dev:hot": "npm run dev -- --hot",
-		"test": "jest" // here
-	},
+  "scripts": {
+    ...
+    "test": "jest --passWithNoTests",
+    ...
+  },
+  ...
+  "jest": {
+    "preset": "ts-jest",
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "setupFiles": [
+      "<rootDir>/enzyme.setup.ts"
+    ],
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
+    "moduleNameMapper": {
+      "^.+\\.(jpg|jpeg|gif|png|mp4|mkv|avi|webm|swf|wav|mid)$": "jest-static-stubs/$1",
+      "\\.(css|less|scss|sass)$": "identity-obj-proxy"
+    }
+  }
 ```
 
-- Create test file `src/App.test.js`
+- Config `enzyme.setup.ts`
 
 ```javascript
-describe('App', () => {
-  it('runs and passes', () => {
-    expect(true).toBe(true)
-  })
-})
+import { configure } from 'enzyme'
+import Adapter from 'enzyme-adapter-react-16'
+
+configure({ adapter: new Adapter() })
 ```
 
 <h3 id='17'>Code Formatter: Prettier</h3>

@@ -24,7 +24,7 @@ module.exports = {
                   'not < 2%',
                   'not ie 11'
                 ],
-                userBuiltIns: 'entry'
+                useBuiltIns: 'entry'
               }
             ],
             '@babel/preset-react'
