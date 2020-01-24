@@ -80,7 +80,7 @@ module.exports = {
 }
 ```
 
-<h3 id='3'>Babel</h3>、
+<h3 id='3'>Babel</h3>
 
 - Install `yarn add --dev @babel/core @babel/cli @babel/preset-env`
 - Install `yarn add --dev babel-loader`
