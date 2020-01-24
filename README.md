@@ -85,6 +85,7 @@ module.exports = {
 - Install `yarn add --dev @babel/core @babel/cli @babel/preset-env`
 - Install `yarn add --dev babel-loader`
 - Config  `webpack.config.js`
+
 ```js
 const path = require('path')
 module.exports = {
